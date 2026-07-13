@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ali Özaslan | Canlı Altın ve Metal Piyasası</title>
+    <title>Altınbaşak | Canlı Altın ve Metal Piyasası</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -165,7 +165,7 @@
 <body>
 
 <header>
-    <h1>Ali Özaslan Canlı Döviz & Metal</h1>
+    <h1>Altınbaşak Canlı Döviz & Metal</h1>
     <p>Serbest piyasa anlık altın, kıymetli maden ve bilezik fiyatları</p>
 </header>
 
@@ -200,7 +200,7 @@
 
     <!-- Burma Bilezik (Gram) -->
     <div class="gold-card">
-        <span class="gold-icon">🌟</span>
+        <span class="gold-icon">🌀</span>
         <div class="gold-name">Burma Bilezik (22K)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
@@ -346,117 +346,113 @@
 </div>
 
 <script>
+    // Sayıları kuruşlu (virgülden sonra iki haneli) Türkçe para formatına çeviren yardımcı fonksiyon
+    function formatMoney(value) {
+        return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL";
+    }
+
     async function fetchGoldPrices() {
         document.getElementById('sync-status').innerText = "Fiyatlar güncelleniyor...";
         document.getElementById('status-dot').style.backgroundColor = "#ffc107"; // Sarı (Yükleniyor)
         
         try {
-            // 1. ADIM: Binance'den anlık fiziksel ons altın (PAXG) fiyatını çekiyoruz (Asla engellenemez)
-            const paxgResponse = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT');
+            // Önbelleği (cache) kırmak için adresin sonuna her seferinde değişen milisaniye damgası ekliyoruz (?_=[timestamp])
+            const timestamp = Date.now();
+            
+            // 1. Binance'den anlık ons altın (PAXG) fiyatı
+            const paxgResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT&_=${timestamp}`);
             if (!paxgResponse.ok) throw new Error('Binance API hatası.');
             const paxgData = await paxgResponse.json();
             const paxgUsd = parseFloat(paxgData.price);
 
-            // 2. ADIM: ExchangeRate-API'den anlık Dolar/TL kurunu çekiyoruz (CORS engelsiz, ultra hızlı)
-            const exchangeResponse = await fetch('https://open.er-api.com/v6/latest/USD');
+            // 2. Döviz kuru API'sinden anlık Dolar/TL
+            const exchangeResponse = await fetch(`https://open.er-api.com/v6/latest/USD?_=${timestamp}`);
             if (!exchangeResponse.ok) throw new Error('Döviz kuru API hatası.');
             const exchangeData = await exchangeResponse.json();
             const usdTry = exchangeData.rates.TRY;
 
-            // TL bazında Ons Altın Fiyatı (1 Troy Ons PAXG = 1 Ons Altın)
+            // TL bazında Ons Altın Fiyatı
             const paxgInTry = paxgUsd * usdTry;
             
             // 1 Troy Ons = 31.1034768 gram (24 Ayar Saf Altın Fiyatı)
             const spotGramPrice = paxgInTry / 31.1034768;
 
             // Fiyat Hesaplamaları ve Kuyumcu Makas Oranları
-            // 1. Gram Altın (24K)
             const gram24Buy = spotGramPrice * 0.995;  
             const gram24Sell = spotGramPrice * 1.015; 
 
-            // 2. 22 Ayar Düz Bilezik (1 Gram)
             const bilezik22Buy = spotGramPrice * 0.916 * 0.97;
             const bilezik22Sell = spotGramPrice * 0.916 * 1.05;
 
-            // 3. 22 Ayar Burma Bilezik (1 Gram)
             const burmaBuy = spotGramPrice * 0.916 * 0.96;
             const burmaSell = spotGramPrice * 0.916 * 1.08;
 
-            // 4. Ajda Bilezik (10 Gram)
             const ajdaBuy = spotGramPrice * 9.16 * 0.965; 
             const ajdaSell = spotGramPrice * 9.16 * 1.11;  
 
-            // 5. Çeyrek Altın (1.6065 gr saf altın)
             const ceyrekBuy = spotGramPrice * 1.6065 * 0.99;
             const ceyrekSell = spotGramPrice * 1.6065 * 1.06;
 
-            // 6. Yarım Altın (3.213 gr saf altın)
             const yarimBuy = spotGramPrice * 3.213 * 0.99;
             const yarimSell = spotGramPrice * 3.213 * 1.055;
 
-            // 7. Tam Altın (6.426 gr saf altın)
             const tamBuy = spotGramPrice * 6.426 * 0.99;
             const tamSell = spotGramPrice * 6.426 * 1.05;
 
-            // 8. Cumhuriyet Altını (Ata) (6.614 gr saf altın)
             const cumhuriyetBuy = spotGramPrice * 6.614 * 0.995;
             const cumhuriyetSell = spotGramPrice * 6.614 * 1.045;
 
-            // 9. Reşat Altın (6.60 gr saf altın)
             const resatBuy = spotGramPrice * 6.60 * 0.99;
             const resatSell = spotGramPrice * 6.60 * 1.055;
 
-            // 10. Gümüş (999 Ayar Gram)
             const silverSpot = spotGramPrice * 0.0122; 
             const silverBuy = silverSpot * 0.95;
             const silverSell = silverSpot * 1.08;
 
-            // 11. Platin (Gram)
             const platinSpot = spotGramPrice * 0.40;
             const platinBuy = platinSpot * 0.98;
             const platinSell = platinSpot * 1.05;
 
-            // 12. Saf Bakır (Kilogram)
             const copperSpotKg = spotGramPrice * 0.125;
             const copperBuy = copperSpotKg * 0.94;
             const copperSell = copperSpotKg * 1.10;
 
-            // DOM Güncellemeleri (Sayı yuvarlama ve Türkçe para birimi formatı)
-            document.getElementById('gram24-buy').innerText = Math.round(gram24Buy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('gram24-sell').innerText = Math.round(gram24Sell).toLocaleString('tr-TR') + " TL";
+            // DOM Güncellemeleri (formatMoney kullanarak kuruşları basıyoruz)
+            document.getElementById('gram24-buy').innerText = formatMoney(gram24Buy);
+            document.getElementById('gram24-sell').innerText = formatMoney(gram24Sell);
 
-            document.getElementById('bilezik22-buy').innerText = Math.round(bilezik22Buy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('bilezik22-sell').innerText = Math.round(bilezik22Sell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('bilezik22-buy').innerText = formatMoney(bilezik22Buy);
+            document.getElementById('bilezik22-sell').innerText = formatMoney(bilezik22Sell);
 
-            document.getElementById('burma-buy').innerText = Math.round(burmaBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('burma-sell').innerText = Math.round(burmaSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('burma-buy').innerText = formatMoney(burmaBuy);
+            document.getElementById('burma-sell').innerText = formatMoney(burmaSell);
 
-            document.getElementById('ajda-buy').innerText = Math.round(ajdaBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('ajda-sell').innerText = Math.round(ajdaSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('ajda-buy').innerText = formatMoney(ajdaBuy);
+            document.getElementById('ajda-sell').innerText = formatMoney(ajdaSell);
 
-            document.getElementById('ceyrek-buy').innerText = Math.round(ceyrekBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('ceyrek-sell').innerText = Math.round(ceyrekSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('ceyrek-buy').innerText = formatMoney(ceyrekBuy);
+            document.getElementById('ceyrek-sell').innerText = formatMoney(ceyrekSell);
 
-            document.getElementById('yarim-buy').innerText = Math.round(yarimBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('yarim-sell').innerText = Math.round(yarimSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('yarim-buy').innerText = formatMoney(yarimBuy);
+            document.getElementById('yarim-sell').innerText = formatMoney(yarimSell);
 
-            document.getElementById('tam-buy').innerText = Math.round(tamBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('tam-sell').innerText = Math.round(tamSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('tam-buy').innerText = formatMoney(tamBuy);
+            document.getElementById('tam-sell').innerText = formatMoney(tamSell);
 
-            document.getElementById('cumhuriyet-buy').innerText = Math.round(cumhuriyetBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('cumhuriyet-sell').innerText = Math.round(cumhuriyetSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('cumhuriyet-buy').innerText = formatMoney(cumhuriyetBuy);
+            document.getElementById('cumhuriyet-sell').innerText = formatMoney(cumhuriyetSell);
 
-            document.getElementById('resat-buy').innerText = Math.round(resatBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('resat-sell').innerText = Math.round(resatSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('resat-buy').innerText = formatMoney(resatBuy);
+            document.getElementById('resat-sell').innerText = formatMoney(resatSell);
 
-            document.getElementById('silver-buy').innerText = Math.round(silverBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('silver-sell').innerText = Math.round(silverSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('silver-buy').innerText = formatMoney(silverBuy);
+            document.getElementById('silver-sell').innerText = formatMoney(silverSell);
 
-            document.getElementById('platin-buy').innerText = Math.round(platinBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('platin-sell').innerText = Math.round(platinSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('platin-buy').innerText = formatMoney(platinBuy);
+            document.getElementById('platin-sell').innerText = formatMoney(platinSell);
 
-            document.getElementById('bakir-buy').innerText = Math.round(copperBuy).toLocaleString('tr-TR') + " TL";
-            document.getElementById('bakir-sell').innerText = Math.round(copperSell).toLocaleString('tr-TR') + " TL";
+            document.getElementById('bakir-buy').innerText = formatMoney(copperBuy);
+            document.getElementById('bakir-sell').innerText = formatMoney(copperSell);
 
             // Durum bilgisi güncelleme
             const now = new Date();
@@ -476,9 +472,6 @@
     // Her 30 saniyede bir otomatik güncelle
     setInterval(fetchGoldPrices, 30000);
 </script>
-<!-- Yasal Uyarı Bölümü -->
-<div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 20px; max-width: 800px; padding: 0 10px; line-height: 1.4;">
-    <strong>Önemli Uyarı:</strong> Bu sitede sunulan altın, gümüş, platin ve bakır fiyatları küresel piyasa verileri (Binance & ExchangeRate) üzerinden anlık formüllerle hesaplanmaktadır. Veriler bilgi amaçlı olup, kesinlikle yatırım tavsiyesi (YTD) niteliği taşımaz. Serbest piyasa ve fiziki kuyumcu fiyatları ile anlık küçük farklılıklar gösterebilir. Yapacağınız işlemlerden doğabilecek zararlardan Altınbaşak sorumluluk kabul etmez.
-</div>
+
 </body>
 </html>
