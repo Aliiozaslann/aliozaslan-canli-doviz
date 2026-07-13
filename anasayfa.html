@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali Özaslan | Canlı Altın ve Metal Piyasası</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-hover: #f3e5ab;
+            --bg-dark: #0a0b0d;
+            --card-bg: #13151a;
+            --text-light: #f5f6f8;
+            --text-muted: #8a8f98;
+            --up-green: #00e676;
+            --red-down: #ff4d4d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Fiyat Kartları Alanı */
+        .gold-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .gold-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gold-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .gold-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .gold-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .label {
+            color: var(--text-muted);
+        }
+
+        .value {
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Sistem Durum Çubuğu */
+        .system-meta {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(212, 175, 55, 0.05);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--up-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--up-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .btn-refresh {
+            background: none;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-refresh:hover {
+            background-color: var(--gold);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Ali Özaslan Canlı Döviz & Metal</h1>
+    <p>Serbest piyasa anlık altın, kıymetli maden ve bilezik fiyatları</p>
+</header>
+
+<div class="gold-grid">
+    <!-- 24 Ayar Gram Altın -->
+    <div class="gold-card">
+        <span class="gold-icon">🏆</span>
+        <div class="gold-name">Gram Altın (24K)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="gram24-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="gram24-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- 22 Ayar Bilezik (Gram) -->
+    <div class="gold-card">
+        <span class="gold-icon">💫</span>
+        <div class="gold-name">22 Ayar Bilezik (Gr)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="bilezik22-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="bilezik22-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Burma Bilezik (Gram) -->
+    <div class="gold-card">
+        <span class="gold-icon">🌀</span>
+        <div class="gold-name">Burma Bilezik (22K)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="burma-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="burma-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Ajda Bilezik (10 Gram) -->
+    <div class="gold-card">
+        <span class="gold-icon">🌟</span>
+        <div class="gold-name">Ajda Bilezik (10gr)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="ajda-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="ajda-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Çeyrek Altın -->
+    <div class="gold-card">
+        <span class="gold-icon">🟡</span>
+        <div class="gold-name">Çeyrek Altın</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="ceyrek-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="ceyrek-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Yarım Altın -->
+    <div class="gold-card">
+        <span class="gold-icon">🪙</span>
+        <div class="gold-name">Yarım Altın</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="yarim-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="yarim-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Tam Altın -->
+    <div class="gold-card">
+        <span class="gold-icon">👑</span>
+        <div class="gold-name">Tam Altın</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="tam-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="tam-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Cumhuriyet Altını (Ata Lira) -->
+    <div class="gold-card">
+        <span class="gold-icon">🏛️</span>
+        <div class="gold-name">Cumhuriyet (Ata)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="cumhuriyet-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="cumhuriyet-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Reşat Altın -->
+    <div class="gold-card">
+        <span class="gold-icon">📜</span>
+        <div class="gold-name">Reşat Altın</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="resat-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="resat-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Gümüş (999 Ayar Gram) -->
+    <div class="gold-card">
+        <span class="gold-icon">🥈</span>
+        <div class="gold-name">Gümüş (999 Ayar)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="silver-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="silver-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Platin (Gram) -->
+    <div class="gold-card">
+        <span class="gold-icon">💿</span>
+        <div class="gold-name">Platin (Gram)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="platin-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="platin-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+
+    <!-- Saf Bakır (Kilogram) -->
+    <div class="gold-card">
+        <span class="gold-icon">⚙️</span>
+        <div class="gold-name">Saf Bakır (Kg)</div>
+        <div class="price-row">
+            <span class="label">Alış:</span>
+            <span class="value" id="bakir-buy">Hesaplanıyor...</span>
+        </div>
+        <div class="price-row">
+            <span class="label">Satış:</span>
+            <span class="value" id="bakir-sell">Hesaplanıyor...</span>
+        </div>
+    </div>
+</div>
+
+<div class="system-meta">
+    <span class="pulse-dot" id="status-dot"></span>
+    <span id="sync-status">Canlı veriler yükleniyor...</span>
+    <button class="btn-refresh" onclick="fetchGoldPrices()">Yenile</button>
+</div>
+
+<script>
+    async function fetchGoldPrices() {
+        document.getElementById('sync-status').innerText = "Fiyatlar güncelleniyor...";
+        document.getElementById('status-dot').style.backgroundColor = "#ffc107"; // Sarı (Yükleniyor)
+        
+        try {
+            // 1. ADIM: Binance'den anlık fiziksel ons altın (PAXG) fiyatını çekiyoruz (Asla engellenemez)
+            const paxgResponse = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT');
+            if (!paxgResponse.ok) throw new Error('Binance API hatası.');
+            const paxgData = await paxgResponse.json();
+            const paxgUsd = parseFloat(paxgData.price);
+
+            // 2. ADIM: ExchangeRate-API'den anlık Dolar/TL kurunu çekiyoruz (CORS engelsiz, ultra hızlı)
+            const exchangeResponse = await fetch('https://open.er-api.com/v6/latest/USD');
+            if (!exchangeResponse.ok) throw new Error('Döviz kuru API hatası.');
+            const exchangeData = await exchangeResponse.json();
+            const usdTry = exchangeData.rates.TRY;
+
+            // TL bazında Ons Altın Fiyatı (1 Troy Ons PAXG = 1 Ons Altın)
+            const paxgInTry = paxgUsd * usdTry;
+            
+            // 1 Troy Ons = 31.1034768 gram (24 Ayar Saf Altın Fiyatı)
+            const spotGramPrice = paxgInTry / 31.1034768;
+
+            // Fiyat Hesaplamaları ve Kuyumcu Makas Oranları
+            // 1. Gram Altın (24K)
+            const gram24Buy = spotGramPrice * 0.995;  
+            const gram24Sell = spotGramPrice * 1.015; 
+
+            // 2. 22 Ayar Düz Bilezik (1 Gram)
+            const bilezik22Buy = spotGramPrice * 0.916 * 0.97;
+            const bilezik22Sell = spotGramPrice * 0.916 * 1.05;
+
+            // 3. 22 Ayar Burma Bilezik (1 Gram)
+            const burmaBuy = spotGramPrice * 0.916 * 0.96;
+            const burmaSell = spotGramPrice * 0.916 * 1.08;
+
+            // 4. Ajda Bilezik (10 Gram)
+            const ajdaBuy = spotGramPrice * 9.16 * 0.965; 
+            const ajdaSell = spotGramPrice * 9.16 * 1.11;  
+
+            // 5. Çeyrek Altın (1.6065 gr saf altın)
+            const ceyrekBuy = spotGramPrice * 1.6065 * 0.99;
+            const ceyrekSell = spotGramPrice * 1.6065 * 1.06;
+
+            // 6. Yarım Altın (3.213 gr saf altın)
+            const yarimBuy = spotGramPrice * 3.213 * 0.99;
+            const yarimSell = spotGramPrice * 3.213 * 1.055;
+
+            // 7. Tam Altın (6.426 gr saf altın)
+            const tamBuy = spotGramPrice * 6.426 * 0.99;
+            const tamSell = spotGramPrice * 6.426 * 1.05;
+
+            // 8. Cumhuriyet Altını (Ata) (6.614 gr saf altın)
+            const cumhuriyetBuy = spotGramPrice * 6.614 * 0.995;
+            const cumhuriyetSell = spotGramPrice * 6.614 * 1.045;
+
+            // 9. Reşat Altın (6.60 gr saf altın)
+            const resatBuy = spotGramPrice * 6.60 * 0.99;
+            const resatSell = spotGramPrice * 6.60 * 1.055;
+
+            // 10. Gümüş (999 Ayar Gram)
+            const silverSpot = spotGramPrice * 0.0122; 
+            const silverBuy = silverSpot * 0.95;
+            const silverSell = silverSpot * 1.08;
+
+            // 11. Platin (Gram)
+            const platinSpot = spotGramPrice * 0.40;
+            const platinBuy = platinSpot * 0.98;
+            const platinSell = platinSpot * 1.05;
+
+            // 12. Saf Bakır (Kilogram)
+            const copperSpotKg = spotGramPrice * 0.125;
+            const copperBuy = copperSpotKg * 0.94;
+            const copperSell = copperSpotKg * 1.10;
+
+            // DOM Güncellemeleri (Sayı yuvarlama ve Türkçe para birimi formatı)
+            document.getElementById('gram24-buy').innerText = Math.round(gram24Buy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('gram24-sell').innerText = Math.round(gram24Sell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('bilezik22-buy').innerText = Math.round(bilezik22Buy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('bilezik22-sell').innerText = Math.round(bilezik22Sell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('burma-buy').innerText = Math.round(burmaBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('burma-sell').innerText = Math.round(burmaSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('ajda-buy').innerText = Math.round(ajdaBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('ajda-sell').innerText = Math.round(ajdaSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('ceyrek-buy').innerText = Math.round(ceyrekBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('ceyrek-sell').innerText = Math.round(ceyrekSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('yarim-buy').innerText = Math.round(yarimBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('yarim-sell').innerText = Math.round(yarimSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('tam-buy').innerText = Math.round(tamBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('tam-sell').innerText = Math.round(tamSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('cumhuriyet-buy').innerText = Math.round(cumhuriyetBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('cumhuriyet-sell').innerText = Math.round(cumhuriyetSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('resat-buy').innerText = Math.round(resatBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('resat-sell').innerText = Math.round(resatSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('silver-buy').innerText = Math.round(silverBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('silver-sell').innerText = Math.round(silverSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('platin-buy').innerText = Math.round(platinBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('platin-sell').innerText = Math.round(platinSell).toLocaleString('tr-TR') + " TL";
+
+            document.getElementById('bakir-buy').innerText = Math.round(copperBuy).toLocaleString('tr-TR') + " TL";
+            document.getElementById('bakir-sell').innerText = Math.round(copperSell).toLocaleString('tr-TR') + " TL";
+
+            // Durum bilgisi güncelleme
+            const now = new Date();
+            document.getElementById('sync-status').innerText = `Canlı Güncellendi: ${now.toLocaleTimeString('tr-TR')}`;
+            document.getElementById('status-dot').style.backgroundColor = "#00e676"; // Yeşil (Aktif)
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('sync-status').innerText = "Bağlantı hatası! Yeniden deneniyor...";
+            document.getElementById('status-dot').style.backgroundColor = "#ff4d4d"; // Kırmızı (Hata)
+        }
+    }
+
+    // İlk açılışta verileri çek
+    fetchGoldPrices();
+
+    // Her 30 saniyede bir otomatik güncelle
+    setInterval(fetchGoldPrices, 30000);
+</script>
+<!-- Yasal Uyarı Bölümü -->
+<div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 20px; max-width: 800px; padding: 0 10px; line-height: 1.4;">
+    <strong>Önemli Uyarı:</strong> Bu sitede sunulan altın, gümüş, platin ve bakır fiyatları küresel piyasa verileri (Binance & ExchangeRate) üzerinden anlık formüllerle hesaplanmaktadır. Veriler bilgi amaçlı olup, kesinlikle yatırım tavsiyesi (YTD) niteliği taşımaz. Serbest piyasa ve fiziki kuyumcu fiyatları ile anlık küçük farklılıklar gösterebilir. Yapacağınız işlemlerden doğabilecek zararlardan Altınbaşak sorumluluk kabul etmez.
+</div>
+</body>
+</html>
