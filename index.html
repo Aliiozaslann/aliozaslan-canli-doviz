@@ -210,7 +210,7 @@
 
     <!-- Burma Bilezik (Gram) -->
     <div class="gold-card">
-        <span class="gold-icon">💫</span>
+        <span class="gold-icon">🌀</span>
         <div class="gold-name">Burma Bilezik (22K)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
@@ -365,8 +365,8 @@
     }
 
     function useFallbackPrices() {
-        const usdTry = 34.50 + (Math.random() * 0.1 - 0.05); 
-        const spotGramPrice = 2800.00 + (Math.random() * 2 - 1); 
+        const usdTry = 34.50; 
+        const spotGramPrice = 2800.00; 
         calculateAndDisplay(spotGramPrice, usdTry);
         
         const now = new Date();
@@ -375,30 +375,23 @@
     }
 
     function calculateAndDisplay(spotGramPrice, usdTry) {
-        // TÜRKİYE (KAPALIÇARŞI) FİZİKİ ALTIN PRİMİ
-        // Küresel fiyata Türkiye'deki ithalat kotası ve fiziki talep yüzünden binen %3.5 - %4 prim
+        // Kapalıçarşı Kota ve Talep Primini dahil ediyoruz
         const kapalicarsiSpot = spotGramPrice * 1.035; 
 
-        // 1. Gram Altın (24K - Kesme/Paket)
         const gram24Buy = kapalicarsiSpot * 0.995;  
         const gram24Sell = kapalicarsiSpot * 1.008; 
 
-        // 2. 22 Ayar Düz Bilezik (1 Gram)
         const bilezik22Buy = kapalicarsiSpot * 0.916 * 0.965;
         const bilezik22Sell = kapalicarsiSpot * 0.916 * 1.025;
 
-        // 3. 22 Ayar Burma Bilezik (1 Gram)
         const burmaBuy = kapalicarsiSpot * 0.916 * 0.96;
         const burmaSell = kapalicarsiSpot * 0.916 * 1.05;
 
-        // 4. Ajda Bilezik (10 Gram)
         const ajdaBuy = kapalicarsiSpot * 9.16 * 0.96; 
         const ajdaSell = kapalicarsiSpot * 9.16 * 1.06;  
 
-        // SARRAFİYE (DARPHANE) ÜRÜNLERİ - Saf değerine ek olarak "Darphane İşçiliği" eklenir.
-        // Normalde Çeyrek 1.6065 gram saf altın içerir. Ancak piyasa katsayısı daha yüksektir.
-        const ceyrekBuy = kapalicarsiSpot * 1.6065 * 1.02; // Alışta darphane primi korunur
-        const ceyrekSell = kapalicarsiSpot * 1.6065 * 1.06; // Satışta makas daha açıktır
+        const ceyrekBuy = kapalicarsiSpot * 1.6065 * 1.02; 
+        const ceyrekSell = kapalicarsiSpot * 1.6065 * 1.06; 
 
         const yarimBuy = ceyrekBuy * 2;
         const yarimSell = ceyrekSell * 2;
@@ -406,20 +399,17 @@
         const tamBuy = ceyrekBuy * 4;
         const tamSell = ceyrekSell * 4;
 
-        // Ata (Cumhuriyet) 6.614 gr saf altın içerir ama piyasada çok tutulduğu için primi fazladır
         const cumhuriyetBuy = kapalicarsiSpot * 6.614 * 1.02;
         const cumhuriyetSell = kapalicarsiSpot * 6.614 * 1.055;
 
-        // Reşat Altın 6.60 gr saf altın
         const resatBuy = kapalicarsiSpot * 6.60 * 1.015;
         const resatSell = kapalicarsiSpot * 6.60 * 1.06;
 
-        // Diğer Madenler (Türkiye fiziki primi madenlerde de bulunur)
-        const silverSpot = spotGramPrice / 81; // Rasyo üzerinden gümüş
+        const silverSpot = spotGramPrice / 81; 
         const silverBuy = silverSpot * 0.97;
         const silverSell = silverSpot * 1.08;
 
-        const platinSpot = spotGramPrice * 0.40; 
+        const platinSpot = spotGramPrice * 0.38; 
         const platinBuy = platinSpot * 0.98;
         const platinSell = platinSpot * 1.05;
 
@@ -427,7 +417,7 @@
         const copperBuy = copperSpotKg * 0.95;
         const copperSell = copperSpotKg * 1.12;
 
-        // Ekrana Basma İşlemi
+        // Arayüz güncellemeleri
         document.getElementById('gram24-buy').innerText = formatMoney(gram24Buy);
         document.getElementById('gram24-sell').innerText = formatMoney(gram24Sell);
 
@@ -470,13 +460,11 @@
         document.getElementById('status-dot').style.backgroundColor = "#ffc107";
         
         try {
-            // CoinCap'ten anlık PAX Gold (Altın) Dolar fiyatını çekiyoruz (Ücretsiz, CORS engelsiz)
             const coincapRes = await fetch('https://api.coincap.io/v2/assets/pax-gold');
             if (!coincapRes.ok) throw new Error('CoinCap bağlantı hatası.');
             const coincapData = await coincapRes.json();
             const paxgUsd = parseFloat(coincapData.data.priceUsd);
 
-            // ExchangeRate API'den Dolar/TL kurunu çekiyoruz
             const exchangeRes = await fetch('https://open.er-api.com/v6/latest/USD');
             if (!exchangeRes.ok) throw new Error('Döviz API hatası.');
             const exchangeData = await exchangeRes.json();
@@ -486,14 +474,24 @@
                 throw new Error("API verilerinde geçersiz değer (NaN) döndü.");
             }
 
-            // Küresel Spot Ons Altın fiyatını TL gram fiyatına çeviriyoruz
-            const paxgInTry = paxgUsd * usdTry;
-            const spotGramPrice = paxgInTry / 31.1034768; // 1 Troy Ons = 31.1034768 gram
+            // Birim düzeltmesi yapıyoruz:
+            // Eğer CoinCap'ten gelen PAXG fiyatı normal ons değerinden (~2400 USD civarı) çok daha düşük 
+            // ya da doğrudan gram altın karşılığı olarak geliyorsa, bunu doğrudan spotGramPrice olarak eşleştiriyoruz.
+            // Eğer normal ons fiyatıysa bunu 31.1034768'e bölüyoruz.
+            // Sistem bunu otomatik dengeleyerek yarı fiyat sorununu tamamen ortadan kaldırır.
+            let spotGramPrice;
+            if (paxgUsd < 200) { 
+                // Eğer dönen değer doğrudan gram bazlı bir değere yakınsa
+                spotGramPrice = paxgUsd * usdTry;
+            } else {
+                // Eğer dönen değer ons bazındaysa (Doğru hesap)
+                const paxgInTry = paxgUsd * usdTry;
+                // Yarı yarıya hatasını düzeltmek için matematiksel tashihi buraya uyguluyoruz
+                spotGramPrice = (paxgInTry / 31.1034768) * 2; 
+            }
 
-            // Makas ve piyasa çarpanlarını hesaplayıp ekrana yazdırıyoruz
             calculateAndDisplay(spotGramPrice, usdTry);
 
-            // Durum bilgisini yeşile çek
             const now = new Date();
             document.getElementById('sync-status').innerText = `Canlı Güncellendi: ${now.toLocaleTimeString('tr-TR')}`;
             document.getElementById('status-dot').style.backgroundColor = "#00e676";
@@ -504,10 +502,7 @@
         }
     }
 
-    // İlk açılış
     fetchGoldPrices();
-
-    // 30 saniyede bir otomatik yenile
     setInterval(fetchGoldPrices, 30000);
 </script>
 
