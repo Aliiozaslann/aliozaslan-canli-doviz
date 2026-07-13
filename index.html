@@ -127,6 +127,8 @@
             border: 1px solid rgba(212, 175, 55, 0.1);
             font-size: 0.9rem;
             color: var(--text-muted);
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .pulse-dot {
@@ -160,6 +162,16 @@
             background-color: var(--gold);
             color: #000;
         }
+
+        .legal-notice {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 25px;
+            max-width: 800px;
+            padding: 0 10px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -176,11 +188,11 @@
         <div class="gold-name">Gram Altın (24K)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="gram24-buy">Hesaplanıyor...</span>
+            <span class="value" id="gram24-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="gram24-sell">Hesaplanıyor...</span>
+            <span class="value" id="gram24-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -190,25 +202,25 @@
         <div class="gold-name">22 Ayar Bilezik (Gr)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="bilezik22-buy">Hesaplanıyor...</span>
+            <span class="value" id="bilezik22-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="bilezik22-sell">Hesaplanıyor...</span>
+            <span class="value" id="bilezik22-sell">Yükleniyor...</span>
         </div>
     </div>
 
     <!-- Burma Bilezik (Gram) -->
     <div class="gold-card">
-        <span class="gold-icon">💫</span>
+        <span class="gold-icon">🌀</span>
         <div class="gold-name">Burma Bilezik (22K)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="burma-buy">Hesaplanıyor...</span>
+            <span class="value" id="burma-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="burma-sell">Hesaplanıyor...</span>
+            <span class="value" id="burma-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -218,11 +230,11 @@
         <div class="gold-name">Ajda Bilezik (10gr)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="ajda-buy">Hesaplanıyor...</span>
+            <span class="value" id="ajda-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="ajda-sell">Hesaplanıyor...</span>
+            <span class="value" id="ajda-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -232,11 +244,11 @@
         <div class="gold-name">Çeyrek Altın</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="ceyrek-buy">Hesaplanıyor...</span>
+            <span class="value" id="ceyrek-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="ceyrek-sell">Hesaplanıyor...</span>
+            <span class="value" id="ceyrek-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -246,11 +258,11 @@
         <div class="gold-name">Yarım Altın</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="yarim-buy">Hesaplanıyor...</span>
+            <span class="value" id="yarim-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="yarim-sell">Hesaplanıyor...</span>
+            <span class="value" id="yarim-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -260,11 +272,11 @@
         <div class="gold-name">Tam Altın</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="tam-buy">Hesaplanıyor...</span>
+            <span class="value" id="tam-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="tam-sell">Hesaplanıyor...</span>
+            <span class="value" id="tam-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -274,11 +286,11 @@
         <div class="gold-name">Cumhuriyet (Ata)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="cumhuriyet-buy">Hesaplanıyor...</span>
+            <span class="value" id="cumhuriyet-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="cumhuriyet-sell">Hesaplanıyor...</span>
+            <span class="value" id="cumhuriyet-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -288,11 +300,11 @@
         <div class="gold-name">Reşat Altın</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="resat-buy">Hesaplanıyor...</span>
+            <span class="value" id="resat-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="resat-sell">Hesaplanıyor...</span>
+            <span class="value" id="resat-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -302,11 +314,11 @@
         <div class="gold-name">Gümüş (999 Ayar)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="silver-buy">Hesaplanıyor...</span>
+            <span class="value" id="silver-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="silver-sell">Hesaplanıyor...</span>
+            <span class="value" id="silver-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -316,11 +328,11 @@
         <div class="gold-name">Platin (Gram)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="platin-buy">Hesaplanıyor...</span>
+            <span class="value" id="platin-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="platin-sell">Hesaplanıyor...</span>
+            <span class="value" id="platin-sell">Yükleniyor...</span>
         </div>
     </div>
 
@@ -330,11 +342,11 @@
         <div class="gold-name">Saf Bakır (Kg)</div>
         <div class="price-row">
             <span class="label">Alış:</span>
-            <span class="value" id="bakir-buy">Hesaplanıyor...</span>
+            <span class="value" id="bakir-buy">Yükleniyor...</span>
         </div>
         <div class="price-row">
             <span class="label">Satış:</span>
-            <span class="value" id="bakir-sell">Hesaplanıyor...</span>
+            <span class="value" id="bakir-sell">Yükleniyor...</span>
         </div>
     </div>
 </div>
@@ -345,39 +357,46 @@
     <button class="btn-refresh" onclick="fetchGoldPrices()">Yenile</button>
 </div>
 
+<div class="legal-notice">
+    <strong>Önemli Uyarı:</strong> Bu sitede sunulan altın, gümüş, platin ve bakır fiyatları küresel piyasa verileri (ExchangeRate) üzerinden anlık formüllerle hesaplanmaktadır. Veriler bilgi amaçlı olup, kesinlikle yatırım tavsiyesi (YTD) niteliği taşımaz. Serbest piyasa ve fiziki kuyumcu fiyatları ile anlık küçük farklılıklar gösterebilir. Yapacağınız işlemlerden doğabilecek zararlardan Altınbaşak sorumluluk kabul etmez.
+</div>
+
 <script>
-    // Sayıları kuruşlu (virgülden sonra iki haneli) Türkçe para formatına çeviren yardımcı fonksiyon
     function formatMoney(value) {
         return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL";
     }
 
     async function fetchGoldPrices() {
         document.getElementById('sync-status').innerText = "Fiyatlar güncelleniyor...";
-        document.getElementById('status-dot').style.backgroundColor = "#ffc107"; // Sarı (Yükleniyor)
+        document.getElementById('status-dot').style.backgroundColor = "#ffc107"; // Sarı
         
         try {
-            // Önbelleği (cache) kırmak için adresin sonuna her seferinde değişen milisaniye damgası ekliyoruz (?_=[timestamp])
-            const timestamp = Date.now();
+            // Tamamen açık, CORS engelsiz ve stabil tek bir istek atıyoruz (cache engellemesi modern yöntemle yapıldı)
+            const response = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+            if (!response.ok) throw new Error('Döviz API hatası.');
             
-            // 1. Binance'den anlık ons altın (PAXG) fiyatı
-            const paxgResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT&_=${timestamp}`);
-            if (!paxgResponse.ok) throw new Error('Binance API hatası.');
-            const paxgData = await paxgResponse.json();
-            const paxgUsd = parseFloat(paxgData.price);
-
-            // 2. Döviz kuru API'sinden anlık Dolar/TL
-            const exchangeResponse = await fetch(`https://open.er-api.com/v6/latest/USD?_=${timestamp}`);
-            if (!exchangeResponse.ok) throw new Error('Döviz kuru API hatası.');
-            const exchangeData = await exchangeResponse.json();
-            const usdTry = exchangeData.rates.TRY;
-
-            // TL bazında Ons Altın Fiyatı
-            const paxgInTry = paxgUsd * usdTry;
+            const data = await response.json();
             
-            // 1 Troy Ons = 31.1034768 gram (24 Ayar Saf Altın Fiyatı)
-            const spotGramPrice = paxgInTry / 31.1034768;
+            const usdTry = data.rates.TRY;
+            const usdXau = data.rates.XAU; // 1 USD karşılığı Ons Altın miktarı
+            const usdXag = data.rates.XAG; // 1 USD karşılığı Ons Gümüş miktarı
+            const usdXpt = data.rates.XPT; // 1 USD karşılığı Ons Platin miktarı
 
-            // Fiyat Hesaplamaları ve Kuyumcu Makas Oranları
+            // Küresel Spot Fiyat Hesaplamaları (Ons fiyatı TL'ye, oradan grama çevriliyor)
+            const spotGramPrice = (usdTry / usdXau) / 31.1034768;
+            const silverSpot = (usdTry / usdXag) / 31.1034768;
+            
+            let platinSpot;
+            if (usdXpt) {
+                platinSpot = (usdTry / usdXpt) / 31.1034768;
+            } else {
+                platinSpot = spotGramPrice * 0.40; // Fallback oranı
+            }
+
+            // Kilogram bakır fiyatı (Küresel piyasada bakır kg fiyatı ortalama 9 USD civarındadır)
+            const copperSpotKg = 9 * usdTry;
+
+            // Kuyumcu Makas ve İşçilik Oranları Uygulaması
             const gram24Buy = spotGramPrice * 0.995;  
             const gram24Sell = spotGramPrice * 1.015; 
 
@@ -405,19 +424,16 @@
             const resatBuy = spotGramPrice * 6.60 * 0.99;
             const resatSell = spotGramPrice * 6.60 * 1.055;
 
-            const silverSpot = spotGramPrice * 0.0122; 
             const silverBuy = silverSpot * 0.95;
             const silverSell = silverSpot * 1.08;
 
-            const platinSpot = spotGramPrice * 0.40;
             const platinBuy = platinSpot * 0.98;
             const platinSell = platinSpot * 1.05;
 
-            const copperSpotKg = spotGramPrice * 0.125;
             const copperBuy = copperSpotKg * 0.94;
             const copperSell = copperSpotKg * 1.10;
 
-            // DOM Güncellemeleri (formatMoney kullanarak kuruşları basıyoruz)
+            // DOM Güncellemeleri
             document.getElementById('gram24-buy').innerText = formatMoney(gram24Buy);
             document.getElementById('gram24-sell').innerText = formatMoney(gram24Sell);
 
@@ -466,10 +482,10 @@
         }
     }
 
-    // İlk açılışta verileri çek
+    // Sayfa açıldığında hemen tetikle
     fetchGoldPrices();
 
-    // Her 30 saniyede bir otomatik güncelle
+    // Her 30 saniyede bir güncelle
     setInterval(fetchGoldPrices, 30000);
 </script>
 
